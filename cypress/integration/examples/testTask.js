@@ -10,6 +10,13 @@ const ENTER_USERNAME = 'Please enter username.';
 const ENTER_PASSWORD = 'Please enter your password.';
 
 
+const userNameField = () => cy.get("[type = 'text']");
+const userPasswordFiel = () => cy.get("[type = 'password']");
+const btnLogin = () => cy.get('.btn-success');
+const inputNameEl = () => cy.get('#all > div > form > div:nth-child(1) > span');
+const inputPasswordEl = () => cy.get('#all > div > form > div:nth-child(2) > span');
+const incorrectUserName = () => cy.get('#all > div > form > div.form-group.has-error > span');
+
 describe('Check all functionality Login form', () => {
 
     beforeEach(() => {
@@ -35,62 +42,62 @@ describe('Check all functionality Login form', () => {
     it('Verify placeholders Username and Password', () => {
         
         cy.get('#all > div > form').within(() => {
-            cy.get("[type = 'text']").should('have.attr', 'placeholder', 'Username');
-            cy.get("[type = 'password']").should('have.attr', 'placeholder', 'Password');
+            userNameField().should('have.attr', 'placeholder', 'Username');
+            userPasswordFiel().should('have.attr', 'placeholder', 'Password');
           });
     });
 
     it('Click button Login when password and login are empty', () => {
         
-        cy.get("[type = 'text']").should('be.visible');
-        cy.get("[type = 'password']").should('be.visible');
-        cy.get('.btn-success').should('be.visible');
-        cy.get('.btn-success').click();
-        cy.get('#all > div > form > div:nth-child(1) > span')
+        userNameField().should('be.visible');
+        userPasswordFiel().should('be.visible');
+        btnLogin().should('be.visible');
+        btnLogin().click();
+        inputNameEl()
         .should('have.text', ENTER_USERNAME);
-        cy.get('#all > div > form > div:nth-child(2) > span')
+        inputPasswordEl()
         .should( 'have.text', ENTER_PASSWORD);
     });
 
     it('Type valid data in the fields input username and password toLowerCase', () => {
         
-        cy.get("[type = 'text']").type(getValue('validName'));
+        userNameField().type(getValue('validName'));
         cy.get("[type = 'password']").type(getValue('validPass'));
-        cy.get('.btn-success').click();
-        cy.get('#all > div > form > div.form-group.has-error > span')
+        btnLogin().click();
+        incorrectUserName()
         .should('have.text', NO_ACC_WITH_USERNAME);
     });
 
     it('Type invalid data in fields input username and password', () => {
         
-        cy.get("[type = 'text']").clear().type(getValue('invalidName'));
-        cy.get("[type = 'password']").clear().type(getValue('invalidPass'));
-        cy.get('.btn-success').click();
-        cy.get('#all > div > form > div.form-group.has-error > span')
+        userNameField().clear().type(getValue('invalidName'));
+        userPasswordFiel().clear().type(getValue('invalidPass'));
+        btnLogin().click();
+        incorrectUserName()
         .should('have.text', NO_ACC_WITH_USERNAME);
          
     });
 
     it('Type data in the field input username without password ', () => {
         
-        cy.get("[type = 'text']").type(getValue('validName'));
-        cy.get('.btn-success').click();
-        cy.get('#all > div > form > div:nth-child(2) > span')
+        userNameField().type(getValue('validName'));
+        btnLogin().click();
+        inputPasswordEl()
         .should( 'have.text', ENTER_PASSWORD);
     });
 
     it('Type data in the field input password without username ', () => {
 
-        cy.get("[type = 'password']").type(getValue('validPass'));
-        cy.get('.btn-success').click();
-        cy.get('#all > div > form > div:nth-child(1) > span')
+        userPasswordFiel().type(getValue('validPass'));
+        btnLogin().click();
+        incorrectUserName()
         .should( 'have.text', ENTER_USERNAME);
     });
 
     it('Successful Login', () => {
 
-        cy.get("[type = 'password']").type(getValue('validPass'));
-        cy.get('.btn-success').click();
+        userPasswordFiel.type(getValue('validPass'));
+        btnLogin().click();
         cy.title().should('eq', 'Home Page');
     });
 });
