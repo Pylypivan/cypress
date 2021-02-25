@@ -1,1 +1,14 @@
-{}
+{
+    "reporter": "mochawesome",
+
+    "env": {
+        
+        "validName": "validName@data.com",
+        "validPass": "validPassword123",
+        "invalidName": "**-/~~+-.,rand@mName",
+        "invalidPass": "1*2#3~4//5aBc(."
+
+    }
+}
+
+   
